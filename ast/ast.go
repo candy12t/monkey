@@ -135,7 +135,7 @@ func (pe *PrefixExpression) String() string {
 	var out bytes.Buffer
 
 	out.WriteString("(")
-	out.WriteString("pe.Operator")
+	out.WriteString(pe.Operator)
 	out.WriteString(pe.Right.String())
 	out.WriteString(")")
 
@@ -156,7 +156,7 @@ func (oe *InfixExpression) String() string {
 
 	out.WriteString("(")
 	out.WriteString(oe.Left.String())
-	out.WriteString("oe.Operator")
+	out.WriteString(" " + oe.Operator + " ")
 	out.WriteString(oe.Right.String())
 	out.WriteString(")")
 
