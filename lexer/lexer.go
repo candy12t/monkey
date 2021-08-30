@@ -4,7 +4,7 @@ import "github.com/candy12t/monkey/token"
 
 type Lexer struct {
 	input        string
-	position     int  // current char postion
+	position     int  // current char position
 	readPosition int  // after current char position
 	ch           byte // current char under examination
 }
@@ -73,6 +73,9 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LPAREN, l.ch)
 	case ')':
 		tok = newToken(token.RPAREN, l.ch)
+	case '"':
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -113,11 +116,22 @@ func (l *Lexer) skipWhitespace() {
 }
 
 func (l *Lexer) readIdentifer() string {
-	postion := l.position
+	position := l.position
 	for isLetter(l.ch) {
 		l.readChar()
 	}
-	return l.input[postion:l.position]
+	return l.input[position:l.position]
+}
+
+func (l *Lexer) readString() string {
+	position := l.position + 1
+	for {
+		l.readChar()
+		if l.ch == '"' || l.ch == 0 {
+			break
+		}
+	}
+	return l.input[position:l.position]
 }
 
 func isLetter(ch byte) bool {
